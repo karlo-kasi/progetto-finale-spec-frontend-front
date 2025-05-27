@@ -1,0 +1,26 @@
+.heros {
+    position: relative;
+    height: 50vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.8)),
+        url('/hero-electric-car.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.search-overlap {
+    margin-top: -28px;
+    z-index: 10;
+    position: relative;
+}
+
+input:focus,
+button:focus,
+.form-control:focus,
+.btn:focus,
+.input-group-text:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}

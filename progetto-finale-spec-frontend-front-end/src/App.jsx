@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { GlobalProvider } from "./context/GlobalContext";
 
 // Pagine
 import Home from "./pages/Home"
@@ -13,16 +14,19 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route Component={DefaultLayout}>
-            <Route path="/" Component={Home} />
-            <Route path="/car/:id" Component={CarDetails} />
-            <Route path="/compare" Component={ComparePage} />
-            <Route path="/favorites" Component={FavoritesPage} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <GlobalProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route Component={DefaultLayout}>
+              <Route path="/" Component={Home} />
+              <Route path="/car/:id" Component={CarDetails} />
+              <Route path="/compare" Component={ComparePage} />
+              <Route path="/favorites" Component={FavoritesPage} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </GlobalProvider>
+
     </>
   )
 }
