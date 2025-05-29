@@ -54,27 +54,31 @@ export default function Home() {
 
                 <div className="container mt-3 mb-5">
                     <div className="row g-4">
+                        {sortedCars.length <= 0 ? (
+                            <p>Nessun risultato trovato...</p>
+                        ) : (
+                            sortedCars.map((car) => (
+                                <div key={car.id} className="col-md-6 col-lg-4 px-4 py-2">
+                                    <div className="card h-100 shadow-sm position-relative">
+                                        <div className="card-body d-flex flex-column justify-content-between">
+                                            <div>
+                                                <h5 className="card-title">{car.title}</h5>
+                                                <p className="card-text text-muted">{car.category}</p>
+                                            </div>
+                                            <div className="d-flex gap-3 mt-3">
+                                                <Link to={`/car/${car.id}`} className="btn btn-primary btn-sm">
+                                                    Dettaglio
+                                                </Link>
+                                            </div>
+                                            <div>
 
-                        {sortedCars.map((car) => (
-                            <div key={car.id} className="col-md-6 col-lg-4 px-4 py-2">
-                                <div className="card h-100 shadow-sm position-relative">
-                                    <div className="card-body d-flex flex-column justify-content-between">
-                                        <div>
-                                            <h5 className="card-title">{car.title}</h5>
-                                            <p className="card-text text-muted">{car.category}</p>
-                                        </div>
-                                        <div className="d-flex gap-3 mt-3">
-                                            <Link to={`/car/${car.id}`} className="btn btn-primary btn-sm">
-                                                Dettaglio
-                                            </Link>
-                                        </div>
-                                        <div>
-
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
+
                     </div>
                 </div>
             </div>

@@ -6,11 +6,11 @@ export default function FavoritesPage() {
 
     return (
         <div className="container my-5">
-            <h2 className="text-center mb-4">🚗 Auto Preferite</h2>
+            <h2 className="text-center mb-4">Auto Preferite</h2>
 
             {favoriteCars.length === 0 ? (
                 <div className="d-flex flex-column align-items-center gap-3">
-                    <p className="text-center">Nessuna auto nei preferiti.</p>
+                    <p className="text-center">Lista preferiti vuota.</p>
                     <NavLink to="/">
                         <button className="btn btn-primary">Esplora Auto</button>
                     </NavLink>
