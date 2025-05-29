@@ -21,15 +21,7 @@ export default function NavBar() {
                                     </NavLink>
                                 </li>
 
-                                <li className="nav-item">
-                                    <NavLink to="/car/:id"
-                                        className={({ isActive }) =>
-                                            isActive ? "nav-link active" : "nav-link"
-                                        }
-                                    >
-                                        Dettaglio
-                                    </NavLink>
-                                </li>
+                        
 
                                 <li className="nav-item">
                                     <NavLink to="/compare"

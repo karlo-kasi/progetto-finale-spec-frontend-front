@@ -1,6 +1,6 @@
 import express from "express";
 import fs from "fs/promises";
-import {existsSync, readFileSync} from "fs";
+import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
@@ -24,6 +24,9 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json({ limit: 'Infinity' }));
+
+// Servire file statici dalla cartella "public"
+app.use(express.static('public'));
 
 // **CACHE in memoria** for each resource type
 const cache = {};
@@ -65,7 +68,7 @@ const processWriteQueue = async (type) => {
 function formatValidationErrors(errors) {
     let formattedMessage = "";
     const fieldErrors = {};
-    
+
     // Group errors by field
     errors.forEach(error => {
         if (!fieldErrors[error.field]) {
@@ -73,13 +76,13 @@ function formatValidationErrors(errors) {
         }
         fieldErrors[error.field].push(error.message);
     });
-    
+
     // Format each field's errors
     for (const [field, messages] of Object.entries(fieldErrors)) {
         const fieldName = field || "Generale";
         formattedMessage += `\n   • ${fieldName}: ${messages.join(", ")}`;
     }
-    
+
     return formattedMessage;
 }
 
@@ -93,13 +96,13 @@ const loadData = async (type) => {
             await fs.mkdir(dbDir, { recursive: true });
             console.log(`Directory del database creata.`);
         }
-        
+
         if (existsSync(dataFile)) {
             const data = await fs.readFile(dataFile, "utf-8");
             if (data.trim()) {
                 try {
                     const loadedData = JSON.parse(data);
-                    
+
                     // Verifica che i dati caricati siano in formato array
                     if (!Array.isArray(loadedData)) {
                         throw new Error(`Errore di struttura nel file ${type}.json: il file deve contenere un array.`);
@@ -107,7 +110,7 @@ const loadData = async (type) => {
                         // Valida ogni elemento nell'array usando il validator appropriato
                         const validator = validators[type];
                         const invalidItems = [];
-                        
+
                         for (let i = 0; i < loadedData.length; i++) {
                             const item = loadedData[i];
                             const validationResult = validator(item);
@@ -119,20 +122,20 @@ const loadData = async (type) => {
                                 });
                             }
                         }
-                        
+
                         if (invalidItems.length > 0) {
                             let errorMessage = `\n⛔ Errori di validazione nel file ${type}.json. Il server non può partire.\n`;
-                            
+
                             invalidItems.forEach(item => {
                                 errorMessage += `\n🚫 Elemento #${item.index + 1} (ID: ${item.id}) non valido:`;
                                 errorMessage += formatValidationErrors(item.errors);
                                 errorMessage += "\n";
                             });
-                            
+
                             errorMessage += `\nCorreggi questi errori nel file database/${type}.json per avviare il server.`;
                             throw new Error(errorMessage);
                         }
-                        
+
                         cache[type] = loadedData;
                     }
                 } catch (parseError) {
@@ -175,17 +178,17 @@ const saveData = async (type) => {
 const loadPromises = resourceTypes.map(type => {
     const pluralType = getPlural(type);
     const validator = validators[type];
-    
+
     // 📌 **POST /:resource - Create a new resource**
     app.post(`/${pluralType}`, async (req, res) => {
         const validationResult = validator(req.body);
         if (!validationResult.valid) {
-            return res.status(400).json({ 
-                error: `Invalid ${type} data`, 
-                details: validationResult.errors 
+            return res.status(400).json({
+                error: `Invalid ${type} data`,
+                details: validationResult.errors
             });
         }
-        
+
         const newItem = req.body;
         // Creazione ID univoco come stringa
         newItem.id = (cache[type].length > 0 ? Math.max(...cache[type].map((t) => parseInt(t.id) || 0)) + 1 : 1);
@@ -215,20 +218,20 @@ const loadPromises = resourceTypes.map(type => {
             return res.status(404).json({ success: false, message: `${type} with id '${itemId}' not found.` });
         }
         const oldItem = cache[type][itemIndex];
-        
+
         // Create a copy of the request body without protected fields
-        const updatedFields = {...req.body};
+        const updatedFields = { ...req.body };
         // Remove protected fields if present
         delete updatedFields.id;
         delete updatedFields.createdAt;
         delete updatedFields.updatedAt;
-        
+
         // Check if any readonly properties are being updated
         const typeReadonlyProps = readonlyProperties[type] || [];
-        const readonlyAttemptsToUpdate = Object.keys(updatedFields).filter(key => 
+        const readonlyAttemptsToUpdate = Object.keys(updatedFields).filter(key =>
             typeReadonlyProps.includes(key)
         );
-        
+
         if (readonlyAttemptsToUpdate.length > 0) {
             return res.status(400).json({
                 success: false,
@@ -239,31 +242,31 @@ const loadPromises = resourceTypes.map(type => {
                 }
             });
         }
-        
+
         // Validate only the fields being updated
         const fieldsToValidate = {};
         Object.keys(updatedFields).forEach(key => {
             fieldsToValidate[key] = updatedFields[key];
         });
-        
+
         if (Object.keys(fieldsToValidate).length > 0) {
-            const validationResult = validator({...oldItem, ...fieldsToValidate});
+            const validationResult = validator({ ...oldItem, ...fieldsToValidate });
             if (!validationResult.valid) {
-                return res.status(400).json({ 
-                    error: `Invalid ${type} data`, 
-                    details: validationResult.errors 
+                return res.status(400).json({
+                    error: `Invalid ${type} data`,
+                    details: validationResult.errors
                 });
             }
         }
-        
+
         // Update timestamp and merge changes with existing item
         const now = new Date().toISOString();
-        cache[type][itemIndex] = { 
-            ...cache[type][itemIndex], 
+        cache[type][itemIndex] = {
+            ...cache[type][itemIndex],
             ...updatedFields,
-            updatedAt: now 
+            updatedAt: now
         };
-        
+
         await saveData(type);
         res.json({ success: true, [type]: cache[type][itemIndex] });
     });
@@ -275,7 +278,7 @@ const loadPromises = resourceTypes.map(type => {
         if (filteredItems.length === cache[type].length) {
             return res.status(404).json({ success: false, message: `${type} with id '${itemId}' not found.` });
         }
-        
+
         cache[type] = filteredItems;
         await saveData(type);
         res.json({ success: true });
@@ -285,23 +288,23 @@ const loadPromises = resourceTypes.map(type => {
     app.get(`/${pluralType}`, (req, res) => {
         const { search, category } = req.query;
         let filteredItems = [...cache[type]];
-        
+
         // Filter by category if provided
         if (category) {
-            filteredItems = filteredItems.filter(item => 
+            filteredItems = filteredItems.filter(item =>
                 item.category && item.category.toLowerCase() === category.toLowerCase()
             );
         }
-        
+
         // Search in title if search parameter is provided
         if (search) {
-            filteredItems = filteredItems.filter(item => 
+            filteredItems = filteredItems.filter(item =>
                 item.title && item.title.toLowerCase().includes(search.toLowerCase())
             );
         }
-        
+
         res.json(filteredItems.map(
-            ({id, createdAt, updatedAt, title, category}) => ({id, createdAt, updatedAt, title, category})
+            ({ id, createdAt, updatedAt, title, category }) => ({ id, createdAt, updatedAt, title, category })
         ));
     });
 

@@ -1,4 +1,9 @@
+import { useGlobalContext } from "../context/GlobalContext"
+
 export default function Search() {
+
+    const { search, setSearch } = useGlobalContext()
+
     return (
         <div className="container search-overlap">
             <div className="input-group input-group-lg">
@@ -9,6 +14,8 @@ export default function Search() {
 
                 <input
                     type="text"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
                     className="form-control border-start-0 border-end-0 rounded-0 fs-6 fs-sm-6 fs-md-5 fs-lg-4"
                     placeholder="Cerca un'auto elettrica..."
                 />
