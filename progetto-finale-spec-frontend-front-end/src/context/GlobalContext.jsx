@@ -19,7 +19,9 @@ export function GlobalProvider({ children }) {
     const [sortBy, setSortBy] = useState("")
     const [sortOrder, setSortOrder] = useState(1)
 
-    console.log(sortBy, sortOrder)
+    //per gestire l'array di confronto
+    const [compareCars, setCompareCars] = useState([])
+
 
     const handleSort = (value) => {
         if (sortBy === value) {
@@ -29,8 +31,6 @@ export function GlobalProvider({ children }) {
             setSortOrder(1)
         }
     }
-
-
 
     const getCars = async () => {
         try {
@@ -60,8 +60,6 @@ export function GlobalProvider({ children }) {
     }, [cars, search, category, sortBy, sortOrder])
 
 
-
-
     const fetchSingleCar = async (id) => {
         try {
 
@@ -73,6 +71,21 @@ export function GlobalProvider({ children }) {
             console.error(err);
         }
     };
+
+    const addCarsForCompare = (car) => {
+
+        if (compareCars.length >= 4) {
+            return alert("Non puoi confrontare più di 4 auto alla volta")
+        }
+
+        if (!compareCars.some(c => c.id === car.id)) {
+            setCompareCars(prev => [...prev, car])
+        }
+    }
+
+    const removeForCompare = (id) => {
+        setCompareCars(prev => prev.filter(car => car.id !== id));
+    }
 
 
     const value = {
@@ -87,6 +100,9 @@ export function GlobalProvider({ children }) {
         sortOrder,
         setSortOrder,
         handleSort,
+        addCarsForCompare,
+        compareCars,
+        removeForCompare
     }
 
     return (

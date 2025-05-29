@@ -6,7 +6,7 @@ export default function Search() {
 
     return (
         <div className="container search-overlap">
-            <div className="input-group input-group-lg">
+            <div className="input-group input-group-lg shadow rounded-pill">
 
                 <span className="input-group-text bg-white border-end-0 rounded-start-pill ps-4">
                     <i className="bi bi-search"></i>

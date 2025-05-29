@@ -6,7 +6,7 @@ export default function CarDetails() {
 
     const { id } = useParams()
 
-    const { singleCar, fetchSingleCar } = useGlobalContext()
+    const { singleCar, fetchSingleCar, addCarsForCompare } = useGlobalContext()
 
     useEffect(() => {
         fetchSingleCar(id)
@@ -19,7 +19,6 @@ export default function CarDetails() {
                     <div className="card shadow-lg p-4">
                         <div className="row g-4">
                             <div className="col-md-6 d-flex justify-content-center align-items-center">
-
                                 {singleCar && (
                                     <img
                                         src={`http://localhost:3001${singleCar?.electriccars?.immagini[0]}`}
@@ -27,7 +26,6 @@ export default function CarDetails() {
                                         className="img-fluid rounded"
                                     />
                                 )}
-
 
                             </div>
                             <div className="col-md-6">
@@ -48,6 +46,12 @@ export default function CarDetails() {
                                 <div className="d-flex gap-3 mt-4">
                                     <Link to="/" className="btn btn-outline-secondary">Torna indietro</Link>
                                     <button className="btn btn-danger">❤️ Aggiungi ai preferiti</button>
+                                    <button
+                                        className="btn btn-light border border-secondary btn-sm"
+                                        onClick={() => addCarsForCompare(singleCar.electriccars)}
+                                    >
+                                        + Aggiungi per Confronto
+                                    </button>
                                 </div>
                             </div>
                         </div>
