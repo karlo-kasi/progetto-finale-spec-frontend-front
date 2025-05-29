@@ -22,6 +22,10 @@ export function GlobalProvider({ children }) {
     //per gestire l'array di confronto
     const [compareCars, setCompareCars] = useState([])
 
+    //per gestire la lista dei preferiti
+    const [favoriteCars, setFavoriteCars] = useState([])
+    console.log(favoriteCars)
+
 
     const handleSort = (value) => {
         if (sortBy === value) {
@@ -87,6 +91,18 @@ export function GlobalProvider({ children }) {
         setCompareCars(prev => prev.filter(car => car.id !== id));
     }
 
+    const addFavoritesList = (car) => {
+
+        if (!favoriteCars.some(f => f.id === car.id)) {
+            setFavoriteCars(prev => [...prev, car])
+        }
+
+    }
+
+    const removeFavoriteList = (id) => {
+        setFavoriteCars(prev => prev.filter(car => car.id !== id));
+    }
+
 
     const value = {
         cars,
@@ -102,7 +118,10 @@ export function GlobalProvider({ children }) {
         handleSort,
         addCarsForCompare,
         compareCars,
-        removeForCompare
+        removeForCompare,
+        favoriteCars,
+        removeFavoriteList,
+        addFavoritesList
     }
 
     return (

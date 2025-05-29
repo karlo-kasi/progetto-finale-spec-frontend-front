@@ -58,16 +58,6 @@ export default function Home() {
                         {sortedCars.map((car) => (
                             <div key={car.id} className="col-md-6 col-lg-4 px-4 py-2">
                                 <div className="card h-100 shadow-sm position-relative">
-
-                                    <button
-                                        className="btn btn-link position-absolute top-0 end-0 m-2 p-0"
-                                        style={{ fontSize: "1.5rem", color: "gray" }}
-                                        onClick={() => toggleFavorite(car.id)}
-                                    >
-                                        <i className="bi bi-heart"></i>
-                                    </button>
-
-
                                     <div className="card-body d-flex flex-column justify-content-between">
                                         <div>
                                             <h5 className="card-title">{car.title}</h5>
