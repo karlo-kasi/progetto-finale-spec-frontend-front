@@ -24,3 +24,11 @@ button:focus,
     box-shadow: none !important;
     outline: none !important;
 }
+
+.heart {
+    font-size: 1.5rem;
+    color: gray;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  

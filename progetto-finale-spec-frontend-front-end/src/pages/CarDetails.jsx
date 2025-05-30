@@ -6,11 +6,13 @@ export default function CarDetails() {
 
     const { id } = useParams()
 
-    const { singleCar, fetchSingleCar, addCarsForCompare, addFavoritesList } = useGlobalContext()
+    const { favoriteCars, singleCar, fetchSingleCar, addCarsForCompare, addFavoritesList, removeFavoriteList } = useGlobalContext()
 
     useEffect(() => {
         fetchSingleCar(id)
     }, [id])
+
+    const isFavorite = favoriteCars.some(f => f.id === singleCar.electriccars.id)
 
     return (
         <>
@@ -30,11 +32,14 @@ export default function CarDetails() {
                             </div>
                             <div className="col-md-6">
                                 <button
-                                    className="btn btn-link position-absolute top-0 end-0 m-2 p-0"
-                                    style={{ fontSize: "1.5rem", color: "gray" }}
-                                    onClick={() => addFavoritesList(singleCar.electriccars)}
+                                    className="btn btn-link position-absolute heart top-0 end-0 m-2 p-0"
+                                    onClick={() =>
+                                        isFavorite
+                                            ? removeFavoriteList(singleCar.electriccars.id)
+                                            : addFavoritesList(singleCar.electriccars)
+                                    }
                                 >
-                                    <i className="bi bi-heart"></i>
+                                    <i className={`bi ${isFavorite ? "bi-heart-fill text-danger" : "bi-heart"}`}></i>
                                 </button>
                                 <h2 className="card-title mb-3">{singleCar.electriccars.title}</h2>
                                 <p className="text-muted">Categoria: {singleCar.electriccars.category}</p>
@@ -51,9 +56,9 @@ export default function CarDetails() {
                                 </ul>
 
                                 <div className="d-flex gap-3 mt-4">
-                                    <Link to="/" className="btn btn-outline-secondary btn-sm">Torna indietro</Link>
+                                    <Link to="/" className="btn btn-outline-secondary">Torna indietro</Link>
                                     <button
-                                        className="btn btn-light border border-secondary btn-sm"
+                                        className="btn btn-primary border border-secondary"
                                         onClick={() => addCarsForCompare(singleCar.electriccars)}
                                     >
                                         + Aggiungi per Confronto

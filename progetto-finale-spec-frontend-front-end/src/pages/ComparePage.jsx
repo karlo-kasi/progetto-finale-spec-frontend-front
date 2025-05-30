@@ -55,7 +55,7 @@ export default function ComparePage() {
                                 <tr key={feature.key}>
                                     <th>{feature.label}</th>
                                     {compareCars.map((car) => (
-                                        <td key={`${car.id}-${feature.key}`}>
+                                        <td key={`${car.id}`}>
                                             {feature.key === "immagini" ? (
                                                 <img
                                                     src={`http://localhost:3001${car.immagini[0]}`}
@@ -65,7 +65,7 @@ export default function ComparePage() {
                                                 />
                                             ) : (
                                                 <>
-                                                    {car[feature.key]}
+                                                    {car[feature.key]} 
                                                     {feature.unit || ""}
                                                 </>
                                             )}

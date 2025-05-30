@@ -10,9 +10,11 @@ export function GlobalProvider({ children }) {
 
     const [cars, setCars] = useState([])
     const [singleCar, setSingleCar] = useState()
+
+    //per gestire il campo ricerca
     const [search, setSearch] = useState("")
 
-
+    //per gestire il filtro
     const [category, setCategory] = useState("")
 
     //per gestire lo stato dell'ordine 
@@ -24,7 +26,6 @@ export function GlobalProvider({ children }) {
 
     //per gestire la lista dei preferiti
     const [favoriteCars, setFavoriteCars] = useState([])
-    console.log(favoriteCars)
 
 
     const handleSort = (value) => {
@@ -100,6 +101,7 @@ export function GlobalProvider({ children }) {
     }
 
     const removeFavoriteList = (id) => {
+
         setFavoriteCars(prev => prev.filter(car => car.id !== id));
     }
 

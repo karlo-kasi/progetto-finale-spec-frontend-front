@@ -6,47 +6,46 @@ export default function NavBar() {
             <div className="bg-dark">
                 <div className="container">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-                        <a className="navbar-brand" href="#">MyApp</a>
-                        <div className="collapse navbar-collapse">
-                            <ul className="navbar-nav me-auto">
+                        <NavLink className="navbar-brand" to="/">MyApp</NavLink>
 
+                        <div className="collapse navbar-collapse d-flex justify-content-between">
+                            <ul className="navbar-nav">
                                 <li className="nav-item">
-                                    <NavLink to="/"
+                                    <NavLink
+                                        to="/"
                                         end
-                                        className={({ isActive }) =>
-                                            isActive ? "nav-link active" : "nav-link"
-                                        }
+                                        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
                                     >
                                         Home
                                     </NavLink>
                                 </li>
-
-                        
-
                                 <li className="nav-item">
-                                    <NavLink to="/compare"
-                                        className={({ isActive }) =>
-                                            isActive ? "nav-link active" : "nav-link"
-                                        }
-                                    >
-                                        Comparatore
-                                    </NavLink>
-                                </li>
-
-                                <li className="nav-item">
-                                    <NavLink to="/favorites"
-                                        className={({ isActive }) =>
-                                            isActive ? "nav-link active" : "nav-link"
-                                        }
+                                    <NavLink
+                                        to="/favorites"
+                                        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
                                     >
                                         Preferiti
                                     </NavLink>
                                 </li>
                             </ul>
+
+    
+                            <div className="ms-auto">
+                                <NavLink
+                                    to="/compare"
+                                    className={({ isActive }) =>
+                                        `btn ${isActive ? "btn-outline-light" : "btn-outline-secondary"}`
+                                    }
+
+                                >
+                                    <i className="fa-solid fa-vials me-2"></i>
+                                    Comparatore
+
+                                </NavLink>
+                            </div>
                         </div>
                     </nav>
                 </div>
-
             </div>
 
         </>
