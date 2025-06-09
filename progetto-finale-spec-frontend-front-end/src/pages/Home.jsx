@@ -25,7 +25,7 @@ export default function Home() {
                 <div className="container mt-4">
                     <div className="d-flex justify-content-md-between p-4">
                         <div>
-                            <h3>Filtri</h3>
+                            <h3>Filtri:</h3>
                         </div>
                         <div className="d-flex gap-4">
                             <select
@@ -52,7 +52,7 @@ export default function Home() {
                 </div>
 
 
-                <div className="container mt-3 mb-5">
+                <div className="container mt-1 mb-5 p-4">
                     <div className="row g-4">
                         {sortedCars.length <= 0 ? (
                             <p>Nessun risultato trovato...</p>

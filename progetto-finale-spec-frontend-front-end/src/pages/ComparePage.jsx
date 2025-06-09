@@ -17,7 +17,7 @@ export default function ComparePage() {
         { label: "Bagagliaio", key: "bagagliaioLitri", unit: " L" },
         { label: "Posti", key: "posti" },
         { label: "Peso", key: "pesoKg", unit: " kg" },
-    ];
+    ]
 
     return (
         <div className="container my-5">
@@ -55,7 +55,7 @@ export default function ComparePage() {
                                 <tr key={feature.key}>
                                     <th>{feature.label}</th>
                                     {compareCars.map((car) => (
-                                        <td key={`${car.id}`}>
+                                        <td key={car.id}>
                                             {feature.key === "immagini" ? (
                                                 <img
                                                     src={`http://localhost:3001${car.immagini[0]}`}
@@ -66,7 +66,7 @@ export default function ComparePage() {
                                             ) : (
                                                 <>
                                                     {car[feature.key]} 
-                                                    {feature.unit || ""}
+                                                    {feature.unit}
                                                 </>
                                             )}
                                         </td>

@@ -27,16 +27,6 @@ export function GlobalProvider({ children }) {
     //per gestire la lista dei preferiti
     const [favoriteCars, setFavoriteCars] = useState([])
 
-
-    const handleSort = (value) => {
-        if (sortBy === value) {
-            setSortOrder(prev => prev * -1)
-        } else {
-            setSortBy(value)
-            setSortOrder(1)
-        }
-    }
-
     const getCars = async () => {
         try {
             const response = await fetch(`${url}`)
@@ -47,12 +37,37 @@ export function GlobalProvider({ children }) {
         }
     }
 
+    const fetchSingleCar = async (id) => {
+        try {
+
+            const response = await fetch(`${url}${id}`)
+            const data = await response.json()
+
+            setSingleCar(data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+
+    //gestione del select
+    const handleSort = (value) => {
+        if (sortBy === value) {
+            setSortOrder(prev => prev * -1)
+        } else {
+            setSortBy(value)
+            setSortOrder(1)
+        }
+    }
+
     const sortedCars = useMemo(() => {
         const arrayCopy = [...cars]
         const filtered = arrayCopy.filter((car) => car.title.toLowerCase().includes(search.toLowerCase()))
         const filteredByCategory = filtered.filter((car) => {
-            if (category === "") return true;
-            return car.category === category;
+            if (category === "") {
+                return true
+            }
+            return car.category === category
         });
         filteredByCategory.sort((a, b) => {
             if (sortBy === "title") {
@@ -65,17 +80,7 @@ export function GlobalProvider({ children }) {
     }, [cars, search, category, sortBy, sortOrder])
 
 
-    const fetchSingleCar = async (id) => {
-        try {
 
-            const response = await fetch(`${url}${id}`);
-            const data = await response.json();
-
-            setSingleCar(data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     const addCarsForCompare = (car) => {
 
@@ -85,6 +90,7 @@ export function GlobalProvider({ children }) {
 
         if (!compareCars.some(c => c.id === car.id)) {
             setCompareCars(prev => [...prev, car])
+            alert(`La macchina è stata aggiunta con successo`)
         }
     }
 
