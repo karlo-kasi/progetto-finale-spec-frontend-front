@@ -2,8 +2,6 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect } from "react"
 import { useGlobalContext } from "../context/GlobalContext"
 
-const url = import.meta.env.VITE_IMAGE_BASE_URL
-
 export default function CarDetails() {
 
     const { id } = useParams()
@@ -18,7 +16,7 @@ export default function CarDetails() {
 
     return (
         <>
-            {singleCar && (
+            {singleCar ? (
                 <div className="container my-5 ">
                     <div className="card shadow-lg p-4">
                         <div className="row g-4">
@@ -70,6 +68,8 @@ export default function CarDetails() {
                         </div>
                     </div>
                 </div>
+            ) : (
+                <p>Nessuna macchina...</p>
             )}
 
         </>
