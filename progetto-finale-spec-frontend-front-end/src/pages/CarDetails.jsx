@@ -25,7 +25,7 @@ export default function CarDetails() {
                             <div className="col-md-6 d-flex justify-content-center align-items-center">
                                 {singleCar && (
                                     <img
-                                        src={`${url}${singleCar?.electriccars?.immagini[0]}`}
+                                        src={`/images/${singleCar.electriccars.immagini[0]}`}
                                         alt={singleCar.electriccars.title}
                                         className="img-fluid rounded"
                                     />
