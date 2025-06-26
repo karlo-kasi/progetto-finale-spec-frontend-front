@@ -37,18 +37,25 @@ export function GlobalProvider({ children }) {
         }
     }
 
-    const fetchSingleCar = async (id) => {
-        try {
+    // const fetchSingleCar = async (id) => {
+    //     try {
 
-            const response = await fetch(`${url}${id}`)
-            const data = await response.json()
+    //         const response = await fetch(`${url}${id}`)
+    //         const data = await response.json()
 
-            setSingleCar(data)
-            
-        } catch (err) {
-            console.error(err)
-        }
+    //         setSingleCar(data)
 
+    //     } catch (err) {
+    //         console.error(err)
+    //     }
+
+    // }
+
+    function fetchSingleCar(id) {
+        fetch(`${url}${id}`)
+            .then(response => response.json())
+            .then(data => setSingleCar(data))
+            .catch(err => console.error(err))
     }
 
 
