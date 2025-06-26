@@ -270,4 +270,4 @@ const loadPromises = resourceTypes.map(type => {
 
 await Promise.all(loadPromises);
 
-module.exports = app;
+export default app;
