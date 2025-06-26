@@ -21,7 +21,7 @@ export default function FavoritesPage() {
                         <div key={car.id} className="col">
                             <div className="card h-100 shadow-sm">
                                 <img
-                                    src={`http://localhost:3001${car.immagini[0]}`}
+                                    src={car.immagini[0]}
                                     alt={car.title}
                                     className="card-img-top"
                                     style={{ height: "200px", objectFit: "cover" }}

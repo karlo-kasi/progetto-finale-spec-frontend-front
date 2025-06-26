@@ -58,7 +58,7 @@ export default function ComparePage() {
                                         <td key={car.id}>
                                             {feature.key === "immagini" ? (
                                                 <img
-                                                    src={`http://localhost:3001${car.immagini[0]}`}
+                                                    src={car.immagini[0]}
                                                     alt={car.title}
                                                     className="img-fluid"
                                                     style={{ maxHeight: "150px" }}
