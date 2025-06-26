@@ -9,7 +9,7 @@ export default function CarDetails() {
     const { favoriteCars, singleCar, fetchSingleCar, addCarsForCompare, addFavoritesList, removeFavoriteList } = useGlobalContext()
 
     useEffect(() => {
-        fetchSingleCar(id)
+        fetchSingleCar(parseInt(id))
     }, [id])
 
     const isFavorite = favoriteCars.some(f => f.id === singleCar.electriccars.id)
