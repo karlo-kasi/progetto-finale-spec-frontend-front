@@ -14,6 +14,9 @@ export default function CarDetails() {
 
     const isFavorite = favoriteCars.some(f => f.id === singleCar.electriccars.id)
 
+    if (singleCar === null) return <p>Caricamento...</p>;
+
+
     return (
         <>
             {singleCar ? (

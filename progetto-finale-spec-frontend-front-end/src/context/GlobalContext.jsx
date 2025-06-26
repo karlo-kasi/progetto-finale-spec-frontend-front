@@ -9,7 +9,7 @@ export function GlobalProvider({ children }) {
 
 
     const [cars, setCars] = useState([])
-    const [singleCar, setSingleCar] = useState()
+    const [singleCar, setSingleCar] = useState(null)
 
     //per gestire il campo ricerca
     const [search, setSearch] = useState("")
@@ -37,26 +37,25 @@ export function GlobalProvider({ children }) {
         }
     }
 
-    // const fetchSingleCar = async (id) => {
-    //     try {
+    const fetchSingleCar = async (id) => {
+        try {
+            const response = await fetch(`${url}${id}`);
+            const data = await response.json();
+            console.log('Risposta fetch dettaglio:', data); // DEBUG
+            setSingleCar(data);
+        } catch (err) {
+            console.error('Errore fetch singola:', err);
+            setSingleCar(null);
+        }
+    };
 
-    //         const response = await fetch(`${url}${id}`)
-    //         const data = await response.json()
 
-    //         setSingleCar(data)
-
-    //     } catch (err) {
-    //         console.error(err)
-    //     }
-
+    // function fetchSingleCar(id) {
+    //     fetch(`${url}${id}`)
+    //         .then(response => response.json())
+    //         .then(data => setSingleCar(data))
+    //         .catch(err => console.error(err))
     // }
-
-    function fetchSingleCar(id) {
-        fetch(`${url}${id}`)
-            .then(response => response.json())
-            .then(data => setSingleCar(data))
-            .catch(err => console.error(err))
-    }
 
 
     //gestione del select
