@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useMemo } from "react";
+import { createContext, useContext, useState, useMemo, useEffect } from "react";
 
 const GlobalContext = createContext();
 
@@ -48,6 +48,10 @@ export function GlobalProvider({ children }) {
             console.error(err)
         }
     }
+
+    useEffect(() => {
+        fetchSingleCar(id)
+    }, [id])
 
 
     //gestione del select
