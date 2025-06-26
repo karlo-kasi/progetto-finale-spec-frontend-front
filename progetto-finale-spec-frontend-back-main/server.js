@@ -1,6 +1,6 @@
 import express from "express";
 import fs from "fs/promises";
-import { existsSync, readFileSync } from "fs";
+import { existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
@@ -11,7 +11,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3001;
 
 // Middleware
 app.use(
@@ -30,11 +29,8 @@ app.use(express.static('public'));
 
 // **CACHE in memoria** for each resource type
 const cache = {};
-
-// **Coda per scritture asincrone** for each resource type
 const writeQueues = {};
 
-// Helper to get plural form (basic pluralization rules)
 function getPlural(singular) {
     if (singular.endsWith('y')) {
         return singular.slice(0, -1) + 'ies';
@@ -45,72 +41,56 @@ function getPlural(singular) {
     }
 }
 
-// Extract resource types from validators
 const resourceTypes = Object.keys(validators);
 
-// Initialize cache and write queues for each resource type
 resourceTypes.forEach(type => {
     cache[type] = [];
     writeQueues[type] = [];
 });
 
-// **Gestore della coda di scrittura**
 const processWriteQueue = async (type) => {
     if (writeQueues[type].length === 0) return;
-    const task = writeQueues[type].shift(); // Prende la prima operazione in coda
-    await task(); // Esegue l'operazione
+    const task = writeQueues[type].shift();
+    await task();
     if (writeQueues[type].length > 0) {
-        setImmediate(() => processWriteQueue(type)); // Continua con la prossima operazione
+        setImmediate(() => processWriteQueue(type));
     }
 };
 
-// Helper function to format validation errors in a readable way
 function formatValidationErrors(errors) {
     let formattedMessage = "";
     const fieldErrors = {};
-
-    // Group errors by field
     errors.forEach(error => {
         if (!fieldErrors[error.field]) {
             fieldErrors[error.field] = [];
         }
         fieldErrors[error.field].push(error.message);
     });
-
-    // Format each field's errors
     for (const [field, messages] of Object.entries(fieldErrors)) {
         const fieldName = field || "Generale";
         formattedMessage += `\n   • ${fieldName}: ${messages.join(", ")}`;
     }
-
     return formattedMessage;
 }
 
-// **Caricare i dati all'avvio**
 const loadData = async (type) => {
     const dbDir = path.join(__dirname, 'database');
     const dataFile = path.join(dbDir, `${type}.json`);
     try {
-        // Check if database directory exists, create it if not
         if (!existsSync(dbDir)) {
             await fs.mkdir(dbDir, { recursive: true });
             console.log(`Directory del database creata.`);
         }
-
         if (existsSync(dataFile)) {
             const data = await fs.readFile(dataFile, "utf-8");
             if (data.trim()) {
                 try {
                     const loadedData = JSON.parse(data);
-
-                    // Verifica che i dati caricati siano in formato array
                     if (!Array.isArray(loadedData)) {
                         throw new Error(`Errore di struttura nel file ${type}.json: il file deve contenere un array.`);
                     } else {
-                        // Valida ogni elemento nell'array usando il validator appropriato
                         const validator = validators[type];
                         const invalidItems = [];
-
                         for (let i = 0; i < loadedData.length; i++) {
                             const item = loadedData[i];
                             const validationResult = validator(item);
@@ -122,20 +102,16 @@ const loadData = async (type) => {
                                 });
                             }
                         }
-
                         if (invalidItems.length > 0) {
                             let errorMessage = `\n⛔ Errori di validazione nel file ${type}.json. Il server non può partire.\n`;
-
                             invalidItems.forEach(item => {
                                 errorMessage += `\n🚫 Elemento #${item.index + 1} (ID: ${item.id}) non valido:`;
                                 errorMessage += formatValidationErrors(item.errors);
                                 errorMessage += "\n";
                             });
-
                             errorMessage += `\nCorreggi questi errori nel file database/${type}.json per avviare il server.`;
                             throw new Error(errorMessage);
                         }
-
                         cache[type] = loadedData;
                     }
                 } catch (parseError) {
@@ -146,16 +122,14 @@ const loadData = async (type) => {
             }
         } else {
             cache[type] = [];
-            await saveData(type); // Create empty file
+            await saveData(type);
             console.log(`Creato file dati vuoto per ${type}.`);
         }
     } catch (error) {
-        // Rilancia l'errore per gestirlo nel Promise.all
         throw error;
     }
 };
 
-// **Salvare i dati nel file (usando la coda)**
 const saveData = async (type) => {
     return new Promise((resolve) => {
         writeQueues[type].push(async () => {
@@ -169,17 +143,15 @@ const saveData = async (type) => {
             resolve();
         });
         if (writeQueues[type].length === 1) {
-            processWriteQueue(type); // Avvia la scrittura solo se la coda era vuota
+            processWriteQueue(type);
         }
     });
 };
 
-// Dynamically create routes for each resource type
 const loadPromises = resourceTypes.map(type => {
     const pluralType = getPlural(type);
     const validator = validators[type];
 
-    // 📌 **POST /:resource - Create a new resource**
     app.post(`/${pluralType}`, async (req, res) => {
         const validationResult = validator(req.body);
         if (!validationResult.valid) {
@@ -188,9 +160,7 @@ const loadPromises = resourceTypes.map(type => {
                 details: validationResult.errors
             });
         }
-
         const newItem = req.body;
-        // Creazione ID univoco come stringa
         newItem.id = (cache[type].length > 0 ? Math.max(...cache[type].map((t) => parseInt(t.id) || 0)) + 1 : 1);
         const creationDate = new Date();
         newItem.createdAt = creationDate.toISOString();
@@ -200,7 +170,6 @@ const loadPromises = resourceTypes.map(type => {
         res.status(201).json({ success: true, [type]: newItem });
     });
 
-    // 📌 **GET /:resource/:id - Get a specific resource**
     app.get(`/${pluralType}/:id`, (req, res) => {
         const itemId = parseInt(req.params.id);
         const item = cache[type].find((p) => p.id === itemId);
@@ -210,7 +179,6 @@ const loadPromises = resourceTypes.map(type => {
         res.json({ success: true, [type]: item });
     });
 
-    // 📌 **PUT /:resource/:id - Update a resource**
     app.put(`/${pluralType}/:id`, async (req, res) => {
         const itemId = parseInt(req.params.id);
         const itemIndex = cache[type].findIndex((p) => p.id === itemId);
@@ -219,14 +187,11 @@ const loadPromises = resourceTypes.map(type => {
         }
         const oldItem = cache[type][itemIndex];
 
-        // Create a copy of the request body without protected fields
         const updatedFields = { ...req.body };
-        // Remove protected fields if present
         delete updatedFields.id;
         delete updatedFields.createdAt;
         delete updatedFields.updatedAt;
 
-        // Check if any readonly properties are being updated
         const typeReadonlyProps = readonlyProperties[type] || [];
         const readonlyAttemptsToUpdate = Object.keys(updatedFields).filter(key =>
             typeReadonlyProps.includes(key)
@@ -243,7 +208,6 @@ const loadPromises = resourceTypes.map(type => {
             });
         }
 
-        // Validate only the fields being updated
         const fieldsToValidate = {};
         Object.keys(updatedFields).forEach(key => {
             fieldsToValidate[key] = updatedFields[key];
@@ -259,7 +223,6 @@ const loadPromises = resourceTypes.map(type => {
             }
         }
 
-        // Update timestamp and merge changes with existing item
         const now = new Date().toISOString();
         cache[type][itemIndex] = {
             ...cache[type][itemIndex],
@@ -271,7 +234,6 @@ const loadPromises = resourceTypes.map(type => {
         res.json({ success: true, [type]: cache[type][itemIndex] });
     });
 
-    // 📌 **DELETE /:resource/:id - Delete a resource**
     app.delete(`/${pluralType}/:id`, async (req, res) => {
         const itemId = parseInt(req.params.id);
         const filteredItems = cache[type].filter((p) => p.id !== itemId);
@@ -284,47 +246,28 @@ const loadPromises = resourceTypes.map(type => {
         res.json({ success: true });
     });
 
-    // 📌 **GET /:resource - Get all resources**
     app.get(`/${pluralType}`, (req, res) => {
         const { search, category } = req.query;
         let filteredItems = [...cache[type]];
 
-        // Filter by category if provided
         if (category) {
             filteredItems = filteredItems.filter(item =>
                 item.category && item.category.toLowerCase() === category.toLowerCase()
             );
         }
-
-        // Search in title if search parameter is provided
         if (search) {
             filteredItems = filteredItems.filter(item =>
                 item.title && item.title.toLowerCase().includes(search.toLowerCase())
             );
         }
-
         res.json(filteredItems.map(
             ({ id, createdAt, updatedAt, title, category }) => ({ id, createdAt, updatedAt, title, category })
         ));
     });
 
-    // Load data for this resource type
     return loadData(type);
 });
 
-Promise.all(loadPromises)
-    .then(() => {
-        // **Avvio del server**
-        app.listen(PORT, () => {
-            console.log(`🔌 API Disponibili:`);
-            resourceTypes.forEach(type => {
-                console.log(`   - /${getPlural(type)} (risorsa ${type})`);
-            });
-            console.log(`✅ Server in ascolto su http://localhost:${PORT}`);
-        });
-    })
-    .catch((error) => {
-        console.error(`\n${error.message}`);
-        console.error("\n⚠️ Il server non è stato avviato a causa degli errori sopra indicati.");
-        process.exit(1); // Termina il processo con un codice di errore
-    });
+await Promise.all(loadPromises);
+
+export default app;
