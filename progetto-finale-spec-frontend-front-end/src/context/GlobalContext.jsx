@@ -39,7 +39,7 @@ export function GlobalProvider({ children }) {
 
     const fetchSingleCar = async (id) => {
         try {
-            const response = await fetch(`${url}${id}`);
+            const response = await fetch(`${url}/${id}`);
             const data = await response.json();
             console.log('Risposta fetch dettaglio:', data); // DEBUG
             setSingleCar(data);
