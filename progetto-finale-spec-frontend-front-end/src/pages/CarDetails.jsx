@@ -2,6 +2,8 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect } from "react"
 import { useGlobalContext } from "../context/GlobalContext"
 
+const url = import.meta.env.VITE_IMAGE_BASE_URL
+
 export default function CarDetails() {
 
     const { id } = useParams()
@@ -23,7 +25,7 @@ export default function CarDetails() {
                             <div className="col-md-6 d-flex justify-content-center align-items-center">
                                 {singleCar && (
                                     <img
-                                        src={`http://localhost:3001${singleCar?.electriccars?.immagini[0]}`}
+                                        src={`${url}${singleCar?.electriccars?.immagini[0]}`}
                                         alt={singleCar.electriccars.title}
                                         className="img-fluid rounded"
                                     />
