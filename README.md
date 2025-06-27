@@ -36,8 +36,26 @@ root/
 │
 ├── backend/ # Express/Node API
 │ └── public/images # [Solo in dev: immagini statiche]
-├── frontend/ # React (Vite)
-│ └── public/images # Immagini deployate (Vercel)
+├── progetto-finale-spec-frontend-front/
+├── public/ # File statici (incluso /images con tutte le immagini delle auto)
+├── src/
+│ ├── assets/ # Eventuali asset (icone, immagini extra)
+│ ├── components/ # Componenti riusabili (Heros, NavBar, Search)
+│ ├── context/ # GlobalContext per lo stato globale e funzioni condivise
+│ ├── layouts/ # Layout di pagina (DefaultLayout)
+│ ├── pages/ # Pagine principali (Home, Dettaglio, Confronto, Preferiti)
+│ ├── App.jsx # Entry point dell’app React
+│ ├── index.css # Stili globali
+│ └── main.jsx # Mount point React
+├── .env # Variabili d’ambiente (es: VITE_BASE_URL)
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+├── vercel.json # Configurazione per routing SPA su Vercel
+└── vite.config.js # Config Vite
 └── README.md
 
 ---
