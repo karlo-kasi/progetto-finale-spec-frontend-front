@@ -44,14 +44,6 @@ Un’applicazione **full-stack** per confrontare auto elettriche, sviluppata com
 
 ---
 
-## 🎥 Demo / GIF
-
-| Home Page | Pagina Dettaglio | Confronto |
-|-----------|------------------|-----------|
-| ![Home](./demo/home.gif) | ![Dettaglio](./demo/detail.gif) | ![Confronto](./demo/compare.gif) |
-
----
-
 ## 🏗️ Architettura del progetto
 
 ```
@@ -81,39 +73,21 @@ progetto-finale-spec/
 
 ---
 
+---
 
+## 🛠️ Tecnologie utilizzate
 
+### Frontend
+- **React**: Libreria per la creazione di interfacce utente
+- **Bootstrap**: Per lo stile e il layout responsive
+- **Vite**: Per il bundling e lo sviluppo veloce
+
+### Backend
+- **Node.js**: Runtime JavaScript per il server
+- **Express**: Framework per la gestione delle API
 
 ---
 
-## 🔎 Dettagli tecnici e decisioni progettuali
+👨‍💻 Autore
+Sviluppato con ❤️ da Karlo.
 
-🔗 Gestione fetch/API
-Tutte le chiamate dati usano una variabile d’ambiente VITE_BASE_URL, settata sia in locale che su Vercel.
-
-Esempio fetch:
-
-```
-// context/GlobalContext.js
-const url = import.meta.env.VITE_BASE_URL;
-const fetchSingleCar = async (id) => {
-    const response = await fetch(`${url}${id}`);
-    const data = await response.json();
-    setSingleCar(data);
-}
-```
-Lato backend, le API rispondono con struttura { success: true, electriccars: { ... } }.
-
-🔄 Stato globale & gestione favoriti/confronto
-Gestito con Context API React,
-con funzioni per aggiungere/rimuovere dalle liste e confronto multiplo.
-
-Snippet favoriti:
-
-```
-const addFavoritesList = (car) => {
-    if (!favoriteCars.some(f => f.id === car.id)) {
-        setFavoriteCars(prev => [...prev, car]);
-    }
-}
-```
