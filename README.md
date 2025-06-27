@@ -10,15 +10,26 @@ Un’applicazione **full-stack** per confrontare auto elettriche, sviluppata com
 
 ---
 
-## ✨ Overview
+## 🚀 Funzionalità principali
 
-Questo progetto permette di:
-- Visualizzare e cercare modelli di auto elettriche
-- Filtrare per categoria
-- Accedere alla scheda dettaglio con tutte le specifiche
-- Salvare le proprie preferite
-- Confrontare fino a 4 auto alla volta
-- Navigare tra tutte le pagine con routing React
+### 1. **Home Page**
+- Visualizza tutte le auto disponibili
+- Filtra per categoria e ordina alfabeticamente
+- Mostra immagini, titoli e categorie delle auto
+![Home Page Demo](./demo/home.gif)
+
+### 2. **Pagina Dettaglio**
+- Visualizza tutte le specifiche tecniche di un'auto
+- Aggiungi o rimuovi l'auto dai preferiti
+- Pulsante per confrontare l'auto con altre
+
+### 3. **Confronto**
+- Confronta fino a 4 auto fianco a fianco
+- Visualizza le specifiche tecniche in una tabella comparativa
+
+### 4. **Preferiti**
+- Salva le auto preferite
+- Rimuovi le auto dalla lista dei preferiti
 
 ---
 
