@@ -32,11 +32,8 @@ Questo progetto permette di:
 
 ## 🏗️ Architettura del progetto
 
-root/
-│
-├── backend/ # Express/Node API
-│ └── public/images # [Solo in dev: immagini statiche]
-├── progetto-finale-spec-frontend-front/
+```
+progetto-finale-spec-frontend-front/
 ├── public/ # File statici (incluso /images con tutte le immagini delle auto)
 ├── src/
 │ ├── assets/ # Eventuali asset (icone, immagini extra)
@@ -56,7 +53,7 @@ root/
 ├── README.md
 ├── vercel.json # Configurazione per routing SPA su Vercel
 └── vite.config.js # Config Vite
-└── README.md
+```
 
 ---
 
