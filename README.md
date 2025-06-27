@@ -16,7 +16,7 @@ Un’applicazione **full-stack** per confrontare auto elettriche, sviluppata com
 - Visualizza tutte le auto disponibili
 - Filtra per categoria e ordina alfabeticamente
 - Mostra immagini, titoli e categorie delle auto
-![Home Page Demo](./demo/home.gif)
+![Home Page Demo](demo/demo-1.gif)
 
 ### 2. **Pagina Dettaglio**
 - Visualizza tutte le specifiche tecniche di un'auto
