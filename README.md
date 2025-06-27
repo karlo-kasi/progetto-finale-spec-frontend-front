@@ -19,6 +19,7 @@ Un’applicazione **full-stack** per confrontare auto elettriche, sviluppata com
 ![Home Page Demo](./demo/demo-1.gif)
 
 - Filtra per categoria e ordina alfabeticamente
+
 ![Home Page Demo](./demo/demo-2.gif)
 
 
@@ -32,13 +33,14 @@ Un’applicazione **full-stack** per confrontare auto elettriche, sviluppata com
 ### 3. **Confronto**
 - Confronta fino a 4 auto fianco a fianco
 - Visualizza le specifiche tecniche in una tabella comparativa
+
 ![Compare Page Demo](./demo/demo-4.gif)
 
 ### 4. **Preferiti**
 - Salva le auto preferite
 - Rimuovi le auto dalla lista dei preferiti
 
-![Favorites Page Demo](./demo/demo-4.gif)
+![Favorites Page Demo](./demo/demo-5.gif)
 
 ---
 
