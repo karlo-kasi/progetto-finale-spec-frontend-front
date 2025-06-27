@@ -33,26 +33,28 @@ Questo progetto permette di:
 ## 🏗️ Architettura del progetto
 
 ```
-progetto-finale-spec-frontend-front/
-├── public/ # File statici (incluso /images con tutte le immagini delle auto)
-├── src/
-│ ├── assets/ # Eventuali asset (icone, immagini extra)
-│ ├── components/ # Componenti riusabili (Heros, NavBar, Search)
-│ ├── context/ # GlobalContext per lo stato globale e funzioni condivise
-│ ├── layouts/ # Layout di pagina (DefaultLayout)
-│ ├── pages/ # Pagine principali (Home, Dettaglio, Confronto, Preferiti)
-│ ├── App.jsx # Entry point dell’app React
-│ ├── index.css # Stili globali
-│ └── main.jsx # Mount point React
-├── .env # Variabili d’ambiente (es: VITE_BASE_URL)
-├── .gitignore
-├── eslint.config.js
-├── index.html
-├── package-lock.json
-├── package.json
-├── README.md
-├── vercel.json # Configurazione per routing SPA su Vercel
-└── vite.config.js # Config Vite
+progetto-finale-spec/
+├── backend/ 
+├── progetto-finale-spec-frontend-front/
+│ ├── public/ 
+│ ├── src/
+│ │ ├── assets/ 
+│ │ ├── components/ 
+│ │ ├── context/ 
+│ │ ├── layouts/ 
+│ │ ├── pages/ 
+│ │ ├── App.jsx 
+│ │ ├── index.css 
+│ │ └── main.jsx 
+│ ├── .env 
+│ ├── .gitignore
+│ ├── eslint.config.js
+│ ├── index.html
+│ ├── package-lock.json
+│ ├── package.json
+│ ├── vercel.json 
+│ └── vite.config.js
+├── README.md 
 ```
 
 ---
